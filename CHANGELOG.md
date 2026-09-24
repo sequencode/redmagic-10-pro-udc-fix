@@ -1,3 +1,10 @@
+## v1.2
+
+- Fixed a race that could leave the patch off: the camera callback ran on its
+  own thread and read `calibrating` before the main thread's write was visible,
+  so leaving the calibration screen while a camera closed switched the overlay
+  off until the next event. All state now lives on the main thread.
+
 ## v1.1
 
 - Accessibility service added, so the patch also appears on the lock screen and

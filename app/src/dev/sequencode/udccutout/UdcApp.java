@@ -7,6 +7,7 @@ import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraManager;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.Looper;
 import android.util.Log;
 
 import java.util.HashSet;
@@ -27,6 +28,12 @@ public class UdcApp extends Application implements SharedPreferences.OnSharedPre
     private OverlayController overlay;
     private Prefs prefs;
     private CameraManager cm;
+    /**
+     * Everything that decides whether the patch is up runs here. The camera
+     * callback used to run on its own thread and raced setCalibrating(): it
+     * read a stale value, computed the opposite answer and, posting last, won.
+     */
+    private final Handler main = new Handler(Looper.getMainLooper());
     private Handler bg;
     private final Set<String> frontIds = new HashSet<>();
     private final Set<String> busy = new HashSet<>();
@@ -57,16 +64,18 @@ public class UdcApp extends Application implements SharedPreferences.OnSharedPre
             bg.postDelayed(this::startWatching, 5000);
             return;
         }
-        cm.registerAvailabilityCallback(new CameraManager.AvailabilityCallback() {
-            @Override public void onCameraAvailable(String id) {
-                if (busy.remove(id)) update();
-            }
-            @Override public void onCameraUnavailable(String id) {
-                Log.i(TAG, "unavailable " + id);
-                if (frontIds.contains(id) && busy.add(id)) update();
-            }
-        }, bg);
-        update();
+        // Posting hands frontIds over safely and puts the callback on main.
+        main.post(() -> {
+            cm.registerAvailabilityCallback(new CameraManager.AvailabilityCallback() {
+                @Override public void onCameraAvailable(String id) {
+                    if (busy.remove(id)) update();
+                }
+                @Override public void onCameraUnavailable(String id) {
+                    if (frontIds.contains(id) && busy.add(id)) update();
+                }
+            }, main);
+            update();
+        });
     }
 
     private boolean findFrontCameras() {
