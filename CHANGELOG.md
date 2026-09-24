@@ -1,13 +1,13 @@
 ## v1.1
 
-- Bedienungshilfen-Dienst ergänzt: Der Punkt erscheint jetzt auch auf dem
-  Sperrbildschirm, also während Face Unlock. Der Keyguard blendet gewöhnliche
-  App-Overlays aus; ein `TYPE_ACCESSIBILITY_OVERLAY` liegt darüber und ist
-  zusätzlich von der 0,8-Deckkraftgrenze ausgenommen — ein Layer statt drei.
-- `update.sh` für das Einspielen neuer Builds.
+- Accessibility service added, so the patch also appears on the lock screen and
+  covers face unlock. The keyguard hides ordinary app overlays; a
+  `TYPE_ACCESSIBILITY_OVERLAY` sits above it and is exempt from the 0.8 opacity
+  cap — one layer instead of three.
+- `update.sh` for deploying rebuilt APKs into the installed module.
 
 ## v1.0
 
-- Erste Fassung: schwarzer Punkt über der Under-Display-Kamera, solange eine
-  App die Frontkamera geöffnet hat. Kalibrier-App mit Live-Vorschau und
-  Streulicht-Messung.
+- First version: a black patch over the under-display camera while a front
+  camera is open, with a calibration app offering a live preview and a glare
+  readout.

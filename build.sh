@@ -30,12 +30,13 @@ javac --release 8 -cp "$JAR" -nowarn \
 "$BT/apksigner" sign --ks "$KS" --ks-pass pass:android --ks-key-alias androiddebugkey \
     --key-pass pass:android --out "$OUT/$APK_NAME" "$OUT/aligned.apk"
 
-mkdir -p module/system/app/UdcCutout
-cp "$OUT/$APK_NAME" module/system/app/UdcCutout/$APK_NAME
+mkdir -p system/app/UdcCutout
+cp "$OUT/$APK_NAME" system/app/UdcCutout/$APK_NAME
 
-VER=$(grep '^version=' module/module.prop | cut -d= -f2)
-ZIP="udc-selfie-cutout-$VER.zip"
+VER=$(grep '^version=' module.prop | cut -d= -f2)
+ZIP="redmagic-10-pro-udc-fix-$VER.zip"
 rm -f "$ZIP"
-(cd module && zip -q -r "../$ZIP" . -x '.*')
+zip -q -r "$ZIP" module.prop customize.sh service.sh system \
+    README.md LICENSE CHANGELOG.md update.json
 echo "APK  : $OUT/$APK_NAME"
 echo "Modul: $ZIP"

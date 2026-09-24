@@ -9,11 +9,11 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
-MOD=/data/adb/modules/udc_selfie_cutout
+MOD=/data/adb/modules/redmagic10pro_udc_fix
 ./build.sh
 
 adb push build/UdcCutout.apk /data/local/tmp/UdcCutout.apk
-adb push module/service.sh /data/local/tmp/service.sh
+adb push service.sh /data/local/tmp/service.sh
 adb shell su -c "cp /data/local/tmp/UdcCutout.apk $MOD/system/app/UdcCutout/UdcCutout.apk \
     && chmod 644 $MOD/system/app/UdcCutout/UdcCutout.apk \
     && chown 0:0 $MOD/system/app/UdcCutout/UdcCutout.apk \
