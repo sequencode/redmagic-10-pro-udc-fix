@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">UDC Cutout</string>
+    <string name="a11y_description">Erlaubt es, den schwarzen Punkt ueber der Under-Display-Kamera auch auf dem Sperrbildschirm anzuzeigen, damit Face Unlock nicht durch leuchtende Pixel gestoert wird. Es werden keine Bildschirminhalte ausgelesen.</string>
+</resources>
